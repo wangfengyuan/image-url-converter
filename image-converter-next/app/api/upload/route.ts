@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
+import { HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import axios from 'axios';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import crypto from 'crypto';
+import { NextResponse } from 'next/server';
 
 // 初始化 S3 客户端
 const R2 = new S3Client({
@@ -24,19 +24,39 @@ export async function POST(request: Request) {
       );
     }
 
+    // 从URL中提取域名
+    const url = new URL(imageUrl);
+    const domain = url.hostname;
+
+    // 生成文件名：使用域名作为基础
+    const hash = crypto.createHash('md5')
+      .update(domain) // 只对域名进行hash
+      .digest('hex')
+      .slice(0, 8);
+    const fileExtension = 'jpg';
+    const filename = `logo-${domain}-${hash}.${fileExtension}`;
+
+    // 检查文件是否已存在
+    try {
+      const existingResponse = await R2.send(new HeadObjectCommand({
+        Bucket: process.env.R2_BUCKET_NAME,
+        Key: filename,
+      }));
+
+      // 如果文件已存在，直接返回现有URL
+      return NextResponse.json({
+        success: true,
+        url: `${process.env.R2_PUBLIC_URL}/${filename}`,
+        cached: true
+      });
+    } catch (err) {
+      // 文件不存在，继续处理
+    }
+
     // 下载图片
     const imageResponse = await axios.get(imageUrl, {
       responseType: 'arraybuffer'
     });
-
-    // 生成文件名
-    const timestamp = Date.now();
-    const hash = crypto.createHash('md5')
-      .update(imageUrl + timestamp)
-      .digest('hex')
-      .slice(0, 8);
-    const fileExtension = 'jpg'; // 可以根据实际Content-Type判断
-    const filename = `${timestamp}-${hash}.${fileExtension}`;
 
     // 上传到 R2
     await R2.send(new PutObjectCommand({
@@ -52,7 +72,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      url: publicUrl
+      url: publicUrl,
+      cached: false
     });
 
   } catch (error: any) {
