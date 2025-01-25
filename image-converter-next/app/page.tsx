@@ -178,15 +178,6 @@ export default function Home() {
         </motion.div>
 
         <Features />
-
-        {/* Usage Limits */}
-        {/* <div className="mt-16 text-center text-sm text-gray-500 dark:text-gray-400">
-          <p>
-            支持格式: {siteConfig.limits.supportedFormats.join(", ")} |
-            单文件最大: {siteConfig.limits.maxFileSize}MB |
-            每日上限: {siteConfig.limits.maxDailyUploads}张
-          </p>
-        </div> */}
       </main>
     </div>
   );
