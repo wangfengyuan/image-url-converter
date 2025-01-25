@@ -1,35 +1,31 @@
-import HeaderLinks from "@/components/header/HeaderLinks";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { siteConfig } from "@/config/site";
-import Image from "next/image";
 import Link from "next/link";
+import { BsGithub } from "react-icons/bs";
 
 const Header = () => {
   return (
-    <header className="py-10">
+    <header className="border-b border-gray-200 dark:border-gray-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <nav className="relative z-50 flex justify-between">
-          <div className="flex items-center md:gap-x-12">
-            <Link href="/" className="flex items-center space-x-1 font-bold">
-              <Image
-                alt={siteConfig.name}
-                src="/logo.svg"
-                className="w-8 h-8"
-                width={32}
-                height={32}
-              />
-              <span className="text-gray-950 dark:text-gray-300">Clean</span>
-              <span className="text-blue-600">Next.js</span>
-              <span className="text-gray-950 dark:text-gray-300">Starter</span>
+        <div className="flex h-16 items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center space-x-2">
+              <span className="text-xl font-bold text-gray-900 dark:text-white">
+                Image URL Converter
+              </span>
             </Link>
-            <div className="hidden md:flex md:gap-x-6"></div>
           </div>
 
-          <div className="flex items-center gap-x-5 md:gap-x-8">
-            <HeaderLinks />
+          <div className="flex items-center space-x-4">
+            <Link
+              href="https://github.com/weijunext/image-url-converter"
+              target="_blank"
+              className="text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              <BsGithub className="h-6 w-6" />
+            </Link>
             <ThemeToggle />
           </div>
-        </nav>
+        </div>
       </div>
     </header>
   );

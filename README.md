@@ -10,6 +10,8 @@ A simple tool that converts any image URL into a permanent link hosted on Cloudf
   └── /image-converter-worker   # Cloudflare Worker project
 ```
 
+![screenshot-1](./screenshot-1.png)
+
 ## Features
 
 - Easy to use: Simply input the original image URL to get a permanent link
@@ -19,6 +21,8 @@ A simple tool that converts any image URL into a permanent link hosted on Cloudf
   - 10GB egress traffic per month
 - Custom domain support
 - Free deployment
+
+![screenshot-2](./screenshot-2.png)
 
 ## Setup Guide
 
