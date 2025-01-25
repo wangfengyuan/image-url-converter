@@ -12,6 +12,7 @@ export default function Home() {
   const [uploadedUrl, setUploadedUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,11 +21,27 @@ export default function Home() {
     setUploadedUrl("");
 
     try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageUrl }),
-      });
+      let response;
+
+      if (selectedFile) {
+        // Handle file upload
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+
+        response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+      } else if (imageUrl) {
+        // Handle URL upload (existing logic)
+        response = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageUrl }),
+        });
+      } else {
+        throw new Error("Please provide an image URL or file");
+      }
 
       const data = await response.json();
 
@@ -50,6 +67,15 @@ export default function Home() {
       toast.success("Copied to clipboard");
     } catch (err) {
       toast.error("Failed to copy");
+    }
+  };
+
+  // Add file input handler
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setImageUrl(""); // Clear URL input when file is selected
     }
   };
 
@@ -90,23 +116,43 @@ export default function Home() {
         >
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Enter Image URL
-                </label>
-                <div className="relative">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Upload Image File
+                  </label>
                   <input
-                    type="text"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    placeholder="https://example.com/image.jpg"
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white pr-12"
-                    required
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                   />
-                  <ImageIcon
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"
-                    size={20}
-                  />
+                </div>
+
+                <div className="text-center text-gray-500 dark:text-gray-400">
+                  OR
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Enter Image URL
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={imageUrl}
+                      onChange={(e) => {
+                        setImageUrl(e.target.value);
+                        setSelectedFile(null); // Clear file input when URL is entered
+                      }}
+                      placeholder="https://example.com/image.jpg"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white pr-12"
+                    />
+                    <ImageIcon
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                      size={20}
+                    />
+                  </div>
                 </div>
               </div>
 

@@ -15,55 +15,87 @@ const R2 = new S3Client({
 
 export async function POST(request: Request) {
   try {
-    const { imageUrl } = await request.json();
+    // Check if the request is multipart form data
+    const contentType = request.headers.get('content-type') || '';
 
-    if (!imageUrl) {
-      return NextResponse.json(
-        { error: 'Please provide an image URL' },
-        { status: 400 }
-      );
-    }
+    let imageData;
+    let filename;
 
-    // extract domain from URL
-    const url = new URL(imageUrl);
-    const domain = url.hostname;
+    if (contentType.includes('multipart/form-data')) {
+      const formData = await request.formData();
+      const file = formData.get('file') as File;
 
-    // generate filename: use domain as base
-    const hash = crypto.createHash('md5')
-      .update(domain) // only hash domain
-      .digest('hex')
-      .slice(0, 8);
-    const fileExtension = 'jpg';
-    const filename = `logo-${domain}-${hash}.${fileExtension}`;
+      if (!file) {
+        return NextResponse.json(
+          { error: 'Please provide an image file' },
+          { status: 400 }
+        );
+      }
 
-    // check if file exists
-    try {
-      const existingResponse = await R2.send(new HeadObjectCommand({
-        Bucket: process.env.R2_BUCKET_NAME,
-        Key: filename,
-      }));
+      // Generate filename for uploaded file
+      const originalName = file.name.toLowerCase();
+      const hash = crypto.createHash('md5')
+        .update(originalName + Date.now())
+        .digest('hex')
+        .slice(0, 8);
+      const fileExtension = originalName.split('.').pop() || 'jpg';
+      filename = `upload-${hash}.${fileExtension}`;
 
-      // if file exists, return existing URL
-      return NextResponse.json({
-        success: true,
-        url: `${process.env.R2_PUBLIC_URL}/${filename}`,
-        cached: true
+      imageData = await file.arrayBuffer();
+    } else {
+      // Handle URL upload (existing logic)
+      const { imageUrl } = await request.json();
+
+      if (!imageUrl) {
+        return NextResponse.json(
+          { error: 'Please provide an image URL' },
+          { status: 400 }
+        );
+      }
+
+      // extract domain from URL
+      const url = new URL(imageUrl);
+      const domain = url.hostname;
+
+      // generate filename: use domain as base
+      const hash = crypto.createHash('md5')
+        .update(domain) // only hash domain
+        .digest('hex')
+        .slice(0, 8);
+      const fileExtension = 'jpg';
+      filename = `logo-${domain}-${hash}.${fileExtension}`;
+
+      // check if file exists
+      try {
+        const existingResponse = await R2.send(new HeadObjectCommand({
+          Bucket: process.env.R2_BUCKET_NAME,
+          Key: filename,
+        }));
+
+        // if file exists, return existing URL
+        return NextResponse.json({
+          success: true,
+          url: `${process.env.R2_PUBLIC_URL}/${filename}`,
+          cached: true
+        });
+      } catch (err) {
+        // file does not exist, continue processing
+      }
+
+      // download image
+      const imageResponse = await axios.get(imageUrl, {
+        responseType: 'arraybuffer'
       });
-    } catch (err) {
-      // file does not exist, continue processing
-    }
 
-    // download image
-    const imageResponse = await axios.get(imageUrl, {
-      responseType: 'arraybuffer'
-    });
+      imageData = imageResponse.data;
+    }
 
     // upload to R2
     await R2.send(new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME,
       Key: filename,
-      Body: imageResponse.data,
-      ContentType: imageResponse.headers['content-type'],
+      Body: imageData,
+      ContentType: 'image/jpeg',
       CacheControl: 'public, max-age=31536000',
     }));
 
