@@ -2,7 +2,11 @@
 
 A simple tool that converts any image URL into a permanent link hosted on Cloudflare R2. Perfect for individuals or small projects needing image hosting services.
 
-## Project Structure
+## 🎉 Who is using this?
+
+- [Next Idea NewTab](https://nextidea.nextidea.dev)
+
+## 📦 Project Structure
 
 ```
 /image-url-converter
@@ -12,7 +16,7 @@ A simple tool that converts any image URL into a permanent link hosted on Cloudf
 
 ![screenshot-1](./screenshot-1.png)
 
-## Features
+## 📌 Features
 
 - Easy to use: Simply input the original image URL to get a permanent link
 - Global acceleration: Fast access via Cloudflare CDN
@@ -24,7 +28,7 @@ A simple tool that converts any image URL into a permanent link hosted on Cloudf
 
 ![screenshot-2](./screenshot-2.png)
 
-## Setup Guide
+## 📚 Setup Guide
 
 ### 1. Prerequisites
 
@@ -117,7 +121,7 @@ npm run dev
 
 You can now access the tool at http://localhost:3000
 
-## How to Use
+## ⚙️ How to Use
 
 1. Ensure the Next.js development server is running
 2. Open your browser and visit http://localhost:3000
@@ -125,7 +129,7 @@ You can now access the tool at http://localhost:3000
 4. Click the "Convert" button
 5. Wait for processing to complete and get your new permanent link
 
-## FAQ
+## ❓ FAQ
 
 Q: Is the free tier sufficient?
 A: It's more than enough for personal use. 10GB storage and 10GB bandwidth monthly can handle thousands of images.
@@ -139,19 +143,19 @@ A: Upload speed primarily depends on the response time of the original image ser
 Q: What image formats are supported?
 A: All common image formats including JPG, PNG, GIF, WebP, and more.
 
-## Important Notes
+## 🔔 Important Notes
 
 1. Ensure the image URLs you want to convert are publicly accessible
 2. Regularly monitor your R2 usage to stay within the free tier limits
 3. Do not upload inappropriate or illegal image content
 
-## Support
+## ☎️ Support
 
 If you need help:
 1. Create an issue on GitHub
 2. Check the [Cloudflare R2 documentation](https://developers.cloudflare.com/r2/)
 3. Visit the [Cloudflare Help Center](https://support.cloudflare.com/)
 
-## License
+## 📜 License
 
 MIT License

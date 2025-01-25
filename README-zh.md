@@ -2,7 +2,11 @@
 
 这是一个简单的工具，可以将任意图片URL转换为托管在 Cloudflare R2 上的永久链接。适合需要图片托管服务的个人或小型项目使用。
 
-## 项目结构
+## 🎉 谁在使用
+
+- [Next Idea NewTab](https://nextidea.nextidea.dev)
+
+## 📦 项目结构
 
 ```
 /image-url-converter
@@ -10,7 +14,7 @@
   └── /image-converter-worker   # Cloudflare Worker 项目
 ```
 
-## 功能特点
+## 📌 功能特点
 
 - 简单易用：只需输入原始图片URL，即可获得永久链接
 - 全球加速：使用 Cloudflare CDN，访问速度快
@@ -20,7 +24,7 @@
 - 支持自定义域名
 - 完全免费部署
 
-## 使用步骤
+## 📚 使用指南
 
 ### 1. 准备工作
 
@@ -115,7 +119,7 @@ npm run dev
 
 现在可以访问 http://localhost:3000 使用工具了。
 
-## 使用方法
+## ⚙️ 使用方法
 
 1. 确保 Next.js 开发服务器正在运行
 2. 打开浏览器访问 http://localhost:3000
@@ -123,7 +127,7 @@ npm run dev
 4. 点击"转换"按钮
 5. 等待处理完成，获取新的永久链接
 
-## 常见问题
+## ❓ 常见问题
 
 Q：免费额度够用吗？
 A：对于个人使用来说绰绰有余。每月 10GB 存储和 10GB 流量，可以存储数千张图片。
@@ -137,19 +141,19 @@ A：图片上传速度主要取决于原始图片所在服务器的响应速度�
 Q：支持哪些图片格式？
 A：支持所有常见的图片格式，包括 JPG、PNG、GIF、WebP 等。
 
-## 注意事项
+## 🔔 注意事项
 
 1. 请确保你要转换的图片URL是可以公开访问的
 2. 建议定期检查 R2 的使用量，避免超出免费额度
 3. 请勿上传违规或违法的图片内容
 
-## 技术支持
+## ☎️ 技术支持
 
 如果遇到问题：
 1. 可以在 GitHub Issues 中提问
 2. 可以查看 [Cloudflare R2 文档](https://developers.cloudflare.com/r2/)
 3. 可以访问 [Cloudflare 帮助中心](https://support.cloudflare.com/)
 
-## 许可证
+## 📜 许可证
 
 MIT License
