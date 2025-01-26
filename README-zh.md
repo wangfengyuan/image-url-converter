@@ -4,7 +4,7 @@
 
 ## 🎉 谁在使用
 
-- [Next Idea NewTab](https://nextidea.nextidea.dev)
+- [Next Idea NewTab](https://newtab.nextidea.dev)
 
 ## 📦 项目结构
 

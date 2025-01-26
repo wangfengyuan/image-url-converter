@@ -4,7 +4,7 @@ A simple tool that converts any image URL into a permanent link hosted on Cloudf
 
 ## 🎉 Who is using this?
 
-- [Next Idea NewTab](https://nextidea.nextidea.dev)
+- [Next Idea NewTab](https://newtab.nextidea.dev)
 
 ## 📦 Project Structure
 
