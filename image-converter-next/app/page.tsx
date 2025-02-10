@@ -145,7 +145,7 @@ export default function Home() {
                         setImageUrl(e.target.value);
                         setSelectedFile(null); // Clear file input when URL is entered
                       }}
-                      placeholder="https://example.com/image.jpg"
+                      placeholder="/placeholder.svg"
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white pr-12"
                     />
                     <ImageIcon
@@ -300,7 +300,7 @@ function PreviewCard({ url }: { url: string }) {
           alt="Converted image preview"
           className="object-cover w-full h-full"
           onError={(e) => {
-            e.currentTarget.src = "/placeholder.png";
+            e.currentTarget.src = "/placeholder.svg";
           }}
         />
       </div>
