@@ -97,11 +97,12 @@ export function getMimeType(extension: string): string {
 export async function convertHeicToJpg(buffer: Buffer): Promise<Buffer> {
   try {
     // Convert HEIC to JPEG using heic-convert
-    return await heicConvert({
+    const converted = await heicConvert({
       buffer: buffer,
-      format: "JPEG", // output format
-      quality: 0.8, // output quality
+      format: "JPEG",
+      // quality: 0.8,  // quality defaults to 0.92
     });
+    return Buffer.from(converted);
   } catch (error: any) {
     console.error("HEIC conversion error:", error);
     throw new Error(`Failed to convert HEIC image: ${error.message}`);
