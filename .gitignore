@@ -128,3 +128,7 @@ dist
 # sitemap
 */sitemap*.xml
 */robots.txt
+
+# Bun
+bun.lockb
+.bun
