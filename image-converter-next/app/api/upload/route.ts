@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkFileExists, downloadImage, generateFileName, uploadToR2 } from "../../actions/upload-actions";
+import { downloadImage, generateFileName, getExtension, uploadToR2 } from "../../actions/upload-actions";
 
 export async function POST(request: Request) {
   try {
@@ -15,8 +15,9 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Please provide an image file" }, { status: 400 });
       }
 
-      filename = await (file.name.toLowerCase(), "upload");
       imageData = await file.arrayBuffer();
+      const extension = getExtension(file.name);
+      filename = await generateFileName(imageData, extension);
     } else {
       const { imageUrl } = await request.json();
 
@@ -24,23 +25,9 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Please provide an image URL" }, { status: 400 });
       }
 
-      const url = new URL(imageUrl);
-      const domainName = url.hostname.split(".")[0];
-      const pathName = url.pathname.split("/").pop();
-      const base = domainName + "-" + pathName;
-
-      filename = await generateFileName(base, "logo");
-
-      const fileExists = await checkFileExists(filename);
-      if (fileExists) {
-        return NextResponse.json({
-          success: true,
-          url: `${process.env.R2_PUBLIC_URL}/${filename}`,
-          cached: true,
-        });
-      }
-
       imageData = await downloadImage(imageUrl);
+      const extension = getExtension(imageUrl);
+      filename = await generateFileName(imageData, extension);
     }
 
     const publicUrl = await uploadToR2(filename, imageData);
