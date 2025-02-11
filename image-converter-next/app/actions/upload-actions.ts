@@ -8,8 +8,9 @@ export async function generateFileName(base: string, usePrefix: 'upload' | 'logo
     .update(base + (usePrefix === 'upload' ? Date.now() : ''))
     .digest('hex')
     .slice(0, 8);
+  const filename = base.split('.')[0]
   const fileExtension = base.split('.').pop() || 'jpg';
-  return `${usePrefix}-${usePrefix === 'logo' ? base + '-' : ''}${hash}.${fileExtension}`;
+  return `${usePrefix}-${usePrefix === 'logo' ? filename + '-' : ''}${hash}.${fileExtension}`;
 }
 
 export async function checkFileExists(filename: string) {
