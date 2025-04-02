@@ -98,7 +98,7 @@ export async function convertHeicToJpg(buffer: Buffer): Promise<Buffer> {
   try {
     // Convert HEIC to JPEG using heic-convert
     const converted = await heicConvert({
-      buffer: buffer,
+      buffer: buffer as any,
       format: "JPEG",
       // quality: 0.8,  // quality defaults to 0.92
     });
